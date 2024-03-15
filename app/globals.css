@@ -31,3 +31,10 @@ body {
     text-wrap: balance;
   }
 }
+
+.translated {
+  translate: 32px;
+}
+.-translated {
+  translate: -32px;
+}
