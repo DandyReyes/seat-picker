@@ -13,13 +13,13 @@ const customStyles = {
   },
 };
 
-function ReactModal() {
-  const [modalIsOpen, setIsOpen] = useState(false);
-
-  function openModal() {
-    setIsOpen(true);
-  }
-
+function ReactModal({
+  isOpen,
+  setIsOpen,
+}: {
+  isOpen: boolean;
+  setIsOpen: any;
+}) {
   function afterOpenModal() {
     // references are now sync'd and can be accessed.
   }
@@ -30,9 +30,8 @@ function ReactModal() {
 
   return (
     <div>
-      <button onClick={openModal}>Open Modal</button>
       <Modal
-        isOpen={modalIsOpen}
+        isOpen={isOpen}
         onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
         style={customStyles}
