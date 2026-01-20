@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import Modal from "react-modal";
+import BuildSingleSection from "./BuildSingleSection";
+import { Sections } from "./types";
 
 const customStyles = {
   content: {
@@ -16,9 +18,20 @@ const customStyles = {
 function ReactModal({
   isOpen,
   setIsOpen,
+  row,
+  door,
+  handleClick,
 }: {
   isOpen: boolean;
   setIsOpen: any;
+  row: any;
+  door: string;
+  handleClick: (
+    event: React.MouseEvent,
+    rowIndex: number,
+    seatKey: string,
+    door: keyof Sections
+  ) => void;
 }) {
   function afterOpenModal() {
     // references are now sync'd and can be accessed.
@@ -39,14 +52,11 @@ function ReactModal({
       >
         <h2 ref={(_subtitle) => ({})}>Hello</h2>
         <button onClick={closeModal}>close</button>
-        <div>I am a modal</div>
-        <form>
-          <input />
-          <button>tab navigation</button>
-          <button>stays</button>
-          <button>inside</button>
-          <button>the modal</button>
-        </form>
+        <BuildSingleSection
+          rows={row}
+          door={door as keyof Sections}
+          handleClick={handleClick}
+        />
       </Modal>
     </div>
   );
