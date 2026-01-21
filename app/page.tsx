@@ -8,7 +8,7 @@ import Image from "next/image";
 import { LandscapeGate } from "./LandScapeGate";
 
 export default function Home() {
-  const [sections, setSections] = useState<Sections>(data);
+  const [sections, setSections] = useState<Sections>(data as Sections);
   const [openModal, setOpenModal] = useState(false);
   const [modalDoor, setModalDoor] = useState<keyof Sections>("door1");
   const [counter, setCounter] = useState(0);
@@ -17,7 +17,7 @@ export default function Home() {
     event: React.MouseEvent,
     rowIndex: number,
     seatKey: string,
-    door: keyof Sections
+    door: keyof Sections,
   ) => {
     event.preventDefault();
 
