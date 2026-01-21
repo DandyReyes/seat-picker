@@ -1,16 +1,17 @@
+"use client";
 import { useEffect, useState } from "react";
 
 export function useLandscapeOnly() {
-  const [isLandscape, setIsLandscape] = useState(
-    window.matchMedia("(orientation: landscape)").matches
-  );
+  const [isLandscape, setIsLandscape] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia("(orientation: landscape)");
-    const handler = (e: MediaQueryListEvent) => setIsLandscape(e.matches);
 
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
+    const update = () => setIsLandscape(mq.matches);
+    update();
+
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
   }, []);
 
   return isLandscape;
