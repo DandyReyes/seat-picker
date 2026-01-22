@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import data from "./data.json";
 import BuildSections from "./BuildSections";
 import ReactModal from "./ReactModal";
@@ -13,29 +13,32 @@ export default function Home() {
   const [modalDoor, setModalDoor] = useState<keyof Sections>("door1");
   const [counter, setCounter] = useState(0);
 
-  const handleClick = (
-    event: React.MouseEvent,
-    rowIndex: number,
-    seatKey: string,
-    door: keyof Sections,
-  ) => {
-    event.preventDefault();
+  const handleClick = useCallback(
+    (
+      event: React.MouseEvent,
+      rowIndex: number,
+      seatKey: string,
+      door: keyof Sections,
+    ) => {
+      event.preventDefault();
 
-    let temp = 0;
+      let temp = 0;
 
-    setSections((prev) => {
-      const next = structuredClone(prev);
-      const seat = next[door].row[rowIndex].seat[seatKey];
+      setSections((prev) => {
+        const next = structuredClone(prev);
+        const seat = next[door].row[rowIndex].seat[seatKey];
 
-      next[door].row[rowIndex].seat[seatKey] =
-        seat === "empty" ? "occupied" : "empty";
+        next[door].row[rowIndex].seat[seatKey] =
+          seat === "empty" ? "occupied" : "empty";
 
-      temp = seat === "empty" ? 1 : -1;
-      return next;
-    });
+        temp = seat === "empty" ? 1 : -1;
+        return next;
+      });
 
-    setCounter((prev) => prev + temp);
-  };
+      setCounter((prev) => prev + temp);
+    },
+    [setSections],
+  );
 
   return (
     <LandscapeGate>

@@ -1,5 +1,6 @@
 import { FaChair } from "react-icons/fa";
 import { Row, Sections } from "./types";
+import Seat from "./Seat";
 
 type Props = {
   rows: Row[];
@@ -8,7 +9,7 @@ type Props = {
     event: React.MouseEvent,
     rowIndex: number,
     seatKey: string,
-    door: keyof Sections
+    door: keyof Sections,
   ) => void;
 };
 
@@ -35,15 +36,11 @@ export default function BuildSingleSection({ rows, door, handleClick }: Props) {
           className={`flex gap-2 mb-3 ${rotateFirstAndLastRows[door]}`}
         >
           {Object.entries(row.seat).map(([seatKey, status]) => (
-            <FaChair
+            <Seat
               key={seatKey}
-              className={`${
-                status === "occupied" ? "text-gray-700" : "text-white"
-              } rounded-t-lg md:rounded-t-xl md:rounded-b-sm lg:rounded-t-lg cursor-pointer 
-              w-6 h-6 md:w-8 md:h-8 lg:w-8 lg:h-8 border-0 md:border-1 mr-1 
-              lg:mr-2 border-white rotate-180`}
-              onClick={(e) => handleClick(e, rowIndex, seatKey, door)}
-            ></FaChair>
+              status={status}
+              onTap={(e) => handleClick(e, rowIndex, seatKey, door)}
+            />
           ))}
         </div>
       ))}
