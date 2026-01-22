@@ -25,7 +25,7 @@ export default function BuildSections({ rows, door }: Props) {
     <div
       className={` ${
         sectionStyles[parseInt(door.slice(-1)) - 1]
-      } "shadow-lg shadow-[-10px_5px_5px_rgba(50,50,50,.5)] p-4 sm:p-2 rounded-lg bg-gray-950 border-2 border-white`}
+      } "shadow-sm shadow-[-10px_5px_5px_rgba(50,50,50,.5)] p-4 sm:p-2 rounded-lg bg-gray-900`}
     >
       {rows.map((row, rowIndex) => (
         <div

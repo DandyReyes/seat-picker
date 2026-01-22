@@ -33,7 +33,7 @@ export default function BuildSingleSection({ rows, door, handleClick }: Props) {
       {rows.map((row, rowIndex) => (
         <div
           key={rowIndex}
-          className={`flex gap-2 mb-3 ${rotateFirstAndLastRows[door]}`}
+          className={`flex gap-0.5 mb-4 ${rotateFirstAndLastRows[door]}`}
         >
           {Object.entries(row.seat).map(([seatKey, status]) => (
             <Seat
