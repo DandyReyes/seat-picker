@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.sendFile("index.html", { root: __dirname });
+  res.send("Server is running");
 });
 
 io.on("connection", async (socket) => {
