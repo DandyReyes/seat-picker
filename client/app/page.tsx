@@ -8,6 +8,8 @@ import Image from "next/image";
 import { LandscapeGate } from "./LandScapeGate";
 import { socket } from "./socket";
 
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   const [sections, setSections] = useState<Sections>(data as Sections);
   const [openModal, setOpenModal] = useState(false);
