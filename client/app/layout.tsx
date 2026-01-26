@@ -23,12 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-screen w-screen">
-      <SocketProvider>
-        <body className={inter.className + " " + "h-screen w-screen"}>
-          {children}
-        </body>
-      </SocketProvider>
-    </html>
+    <SocketProvider>
+      <body className={`${inter.className} h-screen w-screen`}>{children}</body>
+    </SocketProvider>
   );
 }
