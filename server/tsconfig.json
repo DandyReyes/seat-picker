@@ -1,0 +1,13 @@
+{
+  "type": "module",
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "nodenext",
+    "strict": true,
+    "esModuleInterop": true,
+    "outDir": "./dist",
+    "rootDir": "./"
+  },
+  "include": ["*.ts"],
+  "exclude": ["node_modules"]
+}

@@ -1,4 +1,4 @@
-export type SeatStatus = "empty" | "occupied";
+export type SeatStatus = 0 | 1;
 
 export type SeatMap = Record<string, SeatStatus>;
 

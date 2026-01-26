@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { SocketProvider } from "./SocketProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,9 +24,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-screen w-screen">
-      <body className={inter.className + " " + "h-screen w-screen"}>
-        {children}
-      </body>
+      <SocketProvider>
+        <body className={inter.className + " " + "h-screen w-screen"}>
+          {children}
+        </body>
+      </SocketProvider>
     </html>
   );
 }

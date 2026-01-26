@@ -1,4 +1,3 @@
-import { FaChair } from "react-icons/fa";
 import { Row, Sections } from "./types";
 import Seat from "./Seat";
 
