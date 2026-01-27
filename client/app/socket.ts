@@ -1,8 +1,13 @@
-import { io } from 'socket.io-client';
+import { io, Socket } from "socket.io-client";
 
-const URL = process.env.NODE_ENV === 'production' ? process.env.SERVER : 'http://localhost:8000';
+export function createSocket(): Socket {
+  const URL =
+    process.env.NODE_ENV === "production"
+      ? process.env.NEXT_PUBLIC_SERVER_URL
+      : "http://localhost:8000";
 
-export const socket = io(URL, {
-  autoConnect: false,
-  transports: ["websocket"],
-});
+  return io(URL, {
+    autoConnect: false,
+    transports: ["websocket"],
+  });
+}

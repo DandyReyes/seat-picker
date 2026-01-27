@@ -6,7 +6,7 @@ import ReactModal from "./ReactModal";
 import { Sections } from "./types";
 import Image from "next/image";
 import { LandscapeGate } from "./LandScapeGate";
-import { socket } from "./socket";
+import { useSocket } from "./SocketProvider";
 
 export const dynamic = "force-dynamic";
 
@@ -17,7 +17,11 @@ export default function Home() {
   const [counter, setCounter] = useState(0);
   const [userCount, setUserCount] = useState("");
 
+  const socket = useSocket();
+
   useEffect(() => {
+    if (!socket) return;
+
     const handleTotalCount = (data: string) => {
       console.log(data);
       setUserCount(data);
@@ -28,7 +32,7 @@ export default function Home() {
     return () => {
       socket.off("totalCount", handleTotalCount);
     };
-  }, []);
+  }, [socket]);
 
   const handleClick = useCallback(
     (

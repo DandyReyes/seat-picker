@@ -1,19 +1,35 @@
 "use client";
-import { useEffect } from "react";
-import { socket } from "./socket";
 
-export function SocketProvider({
-  children,
-}: {
-  children: JSX.Element;
-}): JSX.Element {
+import {
+  ReactNode,
+  useEffect,
+  useState,
+  createContext,
+  useContext,
+} from "react";
+import { createSocket } from "./socket";
+import { Socket } from "socket.io-client";
+
+const SocketContext = createContext<Socket | null>(null);
+
+export function SocketProvider({ children }: { children: ReactNode }) {
+  const [socket, setSocket] = useState<Socket | null>(null);
+
   useEffect(() => {
-    socket.connect();
+    const s = createSocket();
+    s.connect();
+    setSocket(s);
 
     return () => {
-      socket.disconnect();
+      s.disconnect();
     };
   }, []);
 
-  return children;
+  return (
+    <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
+  );
+}
+
+export function useSocket(): Socket | null {
+  return useContext(SocketContext);
 }
