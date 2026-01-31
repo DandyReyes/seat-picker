@@ -1,18 +1,29 @@
 export type SeatStatus = 0 | 1;
 
-export type SeatMap = Record<string, SeatStatus>;
+export type SeatKey = `${DoorId}:${number}:${number}`;
 
-export type Row = {
-  seat: SeatMap;
+export type SeatMap = Record<SeatKey, SeatStatus>;
+
+export type DoorId = "door1" | "door2" | "door3" | "door4";
+
+export type RowLayout = {
+  seatCount: number;
 };
 
-export type Door = {
-  row: Row[];
+export type DoorLayout = {
+  rows: RowLayout[];
 };
 
-export interface Sections {
-  door1: Door;
-  door2: Door;
-  door3: Door;
-  door4: Door;
-}
+export type SectionsLayout = Record<DoorId, DoorLayout>;
+
+export type BackendSeatMap = Record<number, SeatStatus>;
+
+export type BackendRow = {
+  seat: BackendSeatMap;
+};
+
+export type BackendDoor = {
+  row: BackendRow[];
+};
+
+export type Sections = Record<DoorId, BackendDoor>;

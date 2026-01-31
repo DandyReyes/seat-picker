@@ -4,17 +4,18 @@ import { SeatStatus } from "./types";
 
 type SeatProps = {
   status: SeatStatus;
-  onTap: (e: any) => void;
+  [key: string]: any;
 };
 
-const Seat = React.memo(function Seat({ status, onTap }: SeatProps) {
+const Seat = React.memo(function Seat({ status, ...rest }: SeatProps) {
   return (
     <FaChair
       className={`${
-        status ? "text-gray-700" : "text-white"
-      } cursor-pointer w-6 h-6 md:w-8 md:h-8 lg:w-8 lg:h-8 border-0 p-0.5 box-content
-       border-white rotate-180 touch-manipulation`}
-      onPointerDown={onTap}
+        !!status ? "text-gray-700" : "text-white"
+      } cursor-pointer w-6 h-6 md:w-8 md:h-8 lg:w-8 lg:h-8
+       border-0 p-0.5 box-content border-white rotate-180
+       touch-manipulation`}
+      {...rest}
     />
   );
 });

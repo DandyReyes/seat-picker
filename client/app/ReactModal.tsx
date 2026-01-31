@@ -1,7 +1,7 @@
 import React from "react";
 import Modal from "react-modal";
 import BuildSingleSection from "./BuildSingleSection";
-import { Sections } from "./types";
+import { RowLayout, Sections } from "./types";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 
 const customStyles = {
@@ -27,18 +27,15 @@ function ReactModal({
   setIsOpen,
   row,
   door,
-  handleClick,
+  seats,
+  setSeats,
 }: {
   isOpen: boolean;
   setIsOpen: any;
-  row: any;
+  row: RowLayout[];
   door: string;
-  handleClick: (
-    event: React.MouseEvent,
-    rowIndex: number,
-    seatKey: string,
-    door: keyof Sections
-  ) => void;
+  seats: any;
+  setSeats: any;
 }) {
   function afterOpenModal() {
     // references are now sync'd and can be accessed.
@@ -61,9 +58,10 @@ function ReactModal({
       </div>
       <div className="flex justify-center">
         <BuildSingleSection
-          rows={row}
+          layout={row}
           door={door as keyof Sections}
-          handleClick={handleClick}
+          seats={seats}
+          setSeats={setSeats}
         />
       </div>
     </Modal>

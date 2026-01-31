@@ -1,9 +1,9 @@
 "use client";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import data from "./data.json";
 import BuildSections from "./BuildSections";
 import ReactModal from "./ReactModal";
-import { Sections } from "./types";
+import { DoorId, SeatMap, Sections, SectionsLayout } from "./types";
 import Image from "next/image";
 import { LandscapeGate } from "./LandScapeGate";
 import { useSocket } from "./SocketProvider";
@@ -14,8 +14,9 @@ export default function Home() {
   const [sections, setSections] = useState<Sections>(data as Sections);
   const [openModal, setOpenModal] = useState(false);
   const [modalDoor, setModalDoor] = useState<keyof Sections>("door1");
-  const [counter, setCounter] = useState(0);
+  // const [counter, setCounter] = useState(0);
   const [userCount, setUserCount] = useState("");
+  const [seats, setSeats] = useState<SeatMap>({});
 
   const socket = useSocket();
 
@@ -34,31 +35,21 @@ export default function Home() {
     };
   }, [socket]);
 
-  const handleClick = useCallback(
-    (
-      event: React.MouseEvent,
-      rowIndex: number,
-      seatKey: string,
-      door: keyof Sections,
-    ) => {
-      event.preventDefault();
+  const buildLayout = (): SectionsLayout => {
+    const layout = {} as SectionsLayout;
 
-      let temp = 0;
+    (Object.keys(sections) as DoorId[]).forEach((doorId) => {
+      layout[doorId] = {
+        rows: sections[doorId].row.map((row) => ({
+          seatCount: Object.keys(row.seat).length,
+        })),
+      };
+    });
 
-      setSections((prev) => {
-        const next = structuredClone(prev);
-        const seat = next[door].row[rowIndex].seat[seatKey];
+    return layout;
+  };
 
-        next[door].row[rowIndex].seat[seatKey] = seat ? 0 : 1;
-
-        temp = seat ? -1 : 1;
-        return next;
-      });
-
-      setCounter((prev) => prev + temp);
-    },
-    [setSections],
-  );
+  const layout = buildLayout();
 
   return (
     <LandscapeGate>
@@ -71,7 +62,7 @@ export default function Home() {
           height={200}
           className="absolute top-0 left-0 w-full object-cover -z-10 opacity-30"
         />
-        <div className="absolute top-2 left-2">Number of people: {counter}</div>
+        {/* <div className="absolute top-2 left-2">Number of people: {counter}</div> */}
         <div className="grid grid-cols-4">
           <div
             className="flex items-center justify-end pt-40"
@@ -80,7 +71,7 @@ export default function Home() {
               setModalDoor("door4");
             }}
           >
-            <BuildSections rows={sections.door4.row} door="door4" />
+            <BuildSections seats={seats} layout={layout.door4} door="door4" />
           </div>
 
           <div
@@ -90,7 +81,7 @@ export default function Home() {
               setModalDoor("door3");
             }}
           >
-            <BuildSections rows={sections.door3.row} door="door3" />
+            <BuildSections seats={seats} layout={layout.door3} door="door3" />
           </div>
 
           <div
@@ -100,7 +91,7 @@ export default function Home() {
               setModalDoor("door2");
             }}
           >
-            <BuildSections rows={sections.door2.row} door="door2" />
+            <BuildSections seats={seats} layout={layout.door2} door="door2" />
           </div>
 
           <div
@@ -110,16 +101,17 @@ export default function Home() {
               setModalDoor("door1");
             }}
           >
-            <BuildSections rows={sections.door1.row} door="door1" />
+            <BuildSections seats={seats} layout={layout.door1} door="door1" />
           </div>
         </div>
 
         <ReactModal
           isOpen={openModal}
           setIsOpen={setOpenModal}
-          row={sections[modalDoor].row}
+          row={layout[modalDoor].rows}
           door={modalDoor}
-          handleClick={handleClick}
+          seats={seats}
+          setSeats={setSeats}
         />
       </main>
     </LandscapeGate>
