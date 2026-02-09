@@ -20,6 +20,7 @@ client/build
 # misc
 client/.DS_Store
 client/*.pem
+client/package-lock.json
 
 # debug
 client/npm-debug.log*

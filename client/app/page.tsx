@@ -1,8 +1,8 @@
 "use client";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import BuildSections from "./components/BuildSections";
 import ReactModal from "./ReactModal";
-import { DoorId, SeatMap, Sections, SectionsLayout } from "./types";
+import { SeatMap, Sections } from "./types";
 import Image from "next/image";
 import { LandscapeGate } from "./LandScapeGate";
 import { useSocket } from "./SocketProvider";
