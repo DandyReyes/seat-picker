@@ -1,17 +1,3 @@
-const sectionStyles = {
-  door1: "mb-6 lg:-translated md:mb-10",
-  door2: "md:mt-3",
-  door3: "md:mt-3",
-  door4: "mb-6 lg:translated md:mb-10",
-} as const;
-
-const rotateFirstAndLastRows = {
-  door1: "-rotate-12 justify-start mb-10",
-  door2: "md:mt-1",
-  door3: "md:mt-1",
-  door4: "rotate-12 justify-end mb-10",
-};
-
 import { FaChair } from "react-icons/fa";
 import { DoorLayout, SeatKey, SeatMap } from "../types";
 import { Sections } from "../types";
@@ -24,6 +10,20 @@ type BuildSectionsProps = {
   takenSeatsPerSection: Record<string, number>;
 };
 
+const sectionStyles = {
+  door1: "mb-6 lg:-translate-x-6 md:mb-10",
+  door2: "md:mt-3",
+  door3: "md:mt-3",
+  door4: "mb-6 lg:translate-x-6 md:mb-10",
+} as const;
+
+const rotateFirstAndLastRows = {
+  door1: "-rotate-12 justify-start",
+  door2: "md:mt-1",
+  door3: "md:mt-1",
+  door4: "rotate-12 justify-end",
+};
+
 export default function BuildSections({
   layout,
   door,
@@ -32,9 +32,7 @@ export default function BuildSections({
 }: BuildSectionsProps) {
   return (
     <div
-      className={` ${
-        sectionStyles[door]
-      } "shadow-sm shadow-[-10px_5px_5px_rgba(50,50,50,.5)] p-4 sm:p-2 rounded-lg bg-gray-900`}
+      className={`${sectionStyles[door]} shadow-[-10px_5px_5px_rgba(50,50,50,.5)] p-4 sm:p-2 rounded-lg bg-gray-900`}
     >
       <p>{takenSeatsPerSection[door] ?? 0}</p>
       {layout?.rows.map((row, rowIndex) => (
