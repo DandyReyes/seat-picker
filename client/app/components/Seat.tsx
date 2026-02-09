@@ -1,5 +1,5 @@
 import React from "react";
-import { FaChair, FaSquare } from "react-icons/fa";
+import { FaSquare } from "react-icons/fa";
 import { SeatStatus } from "../types";
 
 type SeatProps = {

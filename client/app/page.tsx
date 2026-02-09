@@ -9,6 +9,7 @@ import { useSocket } from "./SocketProvider";
 import debounce from "lodash.debounce";
 import axios from "axios";
 import { sectionsLayout } from "./sectionsLayout";
+import { URL } from "./socket";
 
 export const dynamic = "force-dynamic";
 
@@ -23,7 +24,7 @@ export default function Home() {
 
   const handleDebounceFn = (value: SeatMap) => {
     axios
-      .post("http://localhost:8000/api/seating", {
+      .post(`${URL}/api/seating`, {
         seats: value,
       })
       .catch((err) => {
@@ -47,8 +48,9 @@ export default function Home() {
   }, [seats, debounceFn]);
 
   useEffect(() => {
+    console.log(URL);
     axios
-      .get("http://localhost:8000/api/seating")
+      .get(`${URL}/api/seating`)
       .then((res) => {
         setSeats(res.data);
       })
