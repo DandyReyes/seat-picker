@@ -39,4 +39,4 @@ export const sectionsLayout = {
       { seatCount: 10 }
     ]
   }
-} as const;
+};

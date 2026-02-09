@@ -7,11 +7,11 @@ export type SeatMap = Record<SeatKey, SeatStatus>;
 export type DoorId = "door1" | "door2" | "door3" | "door4";
 
 export type RowLayout = {
-  seatCount: number;
+  readonly seatCount: number;
 };
 
 export type DoorLayout = {
-  rows: RowLayout[];
+  readonly rows: RowLayout[];
 };
 
 export type SectionsLayout = Record<DoorId, DoorLayout>;
@@ -21,6 +21,14 @@ export type BackendSeatMap = Record<number, SeatStatus>;
 export type BackendRow = {
   seat: BackendSeatMap;
 };
+
+export type SelectedSeat = {
+  door: string;
+  row: number;
+  seat: number;
+  status: SeatStatus;
+};
+
 
 export type BackendDoor = {
   row: BackendRow[];

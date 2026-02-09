@@ -1,6 +1,6 @@
 import React from "react";
 import Modal from "react-modal";
-import BuildSingleSection from "./BuildSingleSection";
+import BuildSingleSection from "./components/BuildSingleSection";
 import { RowLayout, Sections } from "./types";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 

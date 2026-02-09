@@ -1,6 +1,6 @@
 import React from "react";
-import { FaChair } from "react-icons/fa";
-import { SeatStatus } from "./types";
+import { FaChair, FaSquare } from "react-icons/fa";
+import { SeatStatus } from "../types";
 
 type SeatProps = {
   status: SeatStatus;
@@ -9,7 +9,7 @@ type SeatProps = {
 
 const Seat = React.memo(function Seat({ status, ...rest }: SeatProps) {
   return (
-    <FaChair
+    <FaSquare
       className={`${
         !!status ? "text-gray-700" : "text-white"
       } cursor-pointer w-6 h-6 md:w-8 md:h-8 lg:w-8 lg:h-8

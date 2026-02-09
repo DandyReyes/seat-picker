@@ -1,7 +1,7 @@
-import { BackendRow, RowLayout, SeatStatus, Sections } from "./types";
+import { BackendRow, RowLayout, SeatStatus, Sections } from "../types";
 import Seat from "./Seat";
 import { useRef, useState } from "react";
-import { SeatKey } from "./types";
+import { SeatKey } from "../types";
 
 type Props = {
   layout: RowLayout[];
@@ -34,11 +34,6 @@ export default function BuildSingleSection({
   const paintedThisDrag = useRef<Set<SeatKey>>(new Set());
   const paintValue = useRef<0 | 1>(1);
 
-  const getSeatKeyFromPoint = (x: number, y: number): SeatKey | null => {
-    const el = document.elementFromPoint(x, y) as HTMLElement | null;
-    return el?.dataset?.index as SeatKey | null;
-  };
-
   const resolveSeatKey = (el: HTMLElement | null): SeatKey | null => {
     if (!el) return null;
     const seatEl = el.closest("[data-index]") as HTMLElement | null;
@@ -49,12 +44,11 @@ export default function BuildSingleSection({
     e.preventDefault();
 
     isPainting.current = true;
-    paintedThisDrag.current = new Set(); // <-- replace, don't clear
+    paintedThisDrag.current = new Set();
 
     const key = resolveSeatKey(e.target as HTMLElement);
     if (!key) return;
 
-    // Decide painting once
     paintValue.current = seats[key] ? 0 : 1;
 
     paintedThisDrag.current.add(key);
@@ -92,7 +86,8 @@ export default function BuildSingleSection({
 
   const paintSeat = (key: SeatKey) => {
     setSeats((prev) => {
-      if (prev[key] === paintValue.current) return prev;
+      if (prev[key] === paintValue.current && paintValue.current === 0)
+        return prev;
       return { ...prev, [key]: paintValue.current };
     });
   };

@@ -1,22 +1,64 @@
 "use client";
-import { useEffect, useState } from "react";
-import data from "./data.json";
-import BuildSections from "./BuildSections";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import BuildSections from "./components/BuildSections";
 import ReactModal from "./ReactModal";
 import { DoorId, SeatMap, Sections, SectionsLayout } from "./types";
 import Image from "next/image";
 import { LandscapeGate } from "./LandScapeGate";
 import { useSocket } from "./SocketProvider";
+import debounce from "lodash.debounce";
+import axios from "axios";
+import { sectionsLayout } from "./sectionsLayout";
 
 export const dynamic = "force-dynamic";
 
 export default function Home() {
-  const [sections, setSections] = useState<Sections>(data as Sections);
   const [openModal, setOpenModal] = useState(false);
   const [modalDoor, setModalDoor] = useState<keyof Sections>("door1");
-  // const [counter, setCounter] = useState(0);
   const [userCount, setUserCount] = useState("");
   const [seats, setSeats] = useState<SeatMap>({});
+  const [takenSeatsPerSection, setTakenSeatsPerSection] = useState<
+    Record<string, number>
+  >({});
+
+  const handleDebounceFn = (value: SeatMap) => {
+    axios
+      .post("http://localhost:8000/api/seating", {
+        seats: value,
+      })
+      .then((res) => {
+        console.log(res.data);
+      });
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debounceFn = useMemo(() => debounce(handleDebounceFn, 1000), []);
+  const didMount = useRef(false);
+
+  useEffect(() => {
+    if (!didMount.current) {
+      didMount.current = true;
+      return;
+    }
+
+    if (Object.keys(seats).length === 0) return;
+
+    debounceFn(seats);
+  }, [seats, debounceFn]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/api/seating")
+      .then((res) => {
+        setSeats(res.data);
+      })
+      .catch((err) => {
+        console.error("Error fetching seating data:", err);
+      });
+    // axios.get("http://localhost:8000/api/seating/taken-seats").then((res) => {
+    //   console.log(res.data.counts);
+    // });
+  }, []);
 
   const socket = useSocket();
 
@@ -24,37 +66,28 @@ export default function Home() {
     if (!socket) return;
 
     const handleTotalCount = (data: string) => {
-      console.log(data);
       setUserCount(data);
     };
 
+    const handleCounts = (counts: Record<string, number>) => {
+      setTakenSeatsPerSection(counts);
+    };
+
     socket.on("totalCount", handleTotalCount);
+    socket.on("seatCountsUpdated", handleCounts);
 
     return () => {
       socket.off("totalCount", handleTotalCount);
+      socket.off("seatCountsUpdated", handleCounts);
     };
   }, [socket]);
-
-  const buildLayout = (): SectionsLayout => {
-    const layout = {} as SectionsLayout;
-
-    (Object.keys(sections) as DoorId[]).forEach((doorId) => {
-      layout[doorId] = {
-        rows: sections[doorId].row.map((row) => ({
-          seatCount: Object.keys(row.seat).length,
-        })),
-      };
-    });
-
-    return layout;
-  };
-
-  const layout = buildLayout();
 
   return (
     <LandscapeGate>
       <main>
-        <div className="text-2xl text-red-900 bg-yellow-300">{userCount}</div>
+        <div className="text-green-500 text-sm absolute bottom-0 right-0 mr-5">
+          Online: {userCount}
+        </div>
         <Image
           src="/stage.svg"
           alt="theater top view"
@@ -71,7 +104,12 @@ export default function Home() {
               setModalDoor("door4");
             }}
           >
-            <BuildSections seats={seats} layout={layout.door4} door="door4" />
+            <BuildSections
+              seats={seats}
+              layout={sectionsLayout.door4}
+              door="door4"
+              takenSeatsPerSection={takenSeatsPerSection}
+            />
           </div>
 
           <div
@@ -81,7 +119,12 @@ export default function Home() {
               setModalDoor("door3");
             }}
           >
-            <BuildSections seats={seats} layout={layout.door3} door="door3" />
+            <BuildSections
+              seats={seats}
+              layout={sectionsLayout.door3}
+              door="door3"
+              takenSeatsPerSection={takenSeatsPerSection}
+            />
           </div>
 
           <div
@@ -91,7 +134,12 @@ export default function Home() {
               setModalDoor("door2");
             }}
           >
-            <BuildSections seats={seats} layout={layout.door2} door="door2" />
+            <BuildSections
+              seats={seats}
+              layout={sectionsLayout.door2}
+              door="door2"
+              takenSeatsPerSection={takenSeatsPerSection}
+            />
           </div>
 
           <div
@@ -101,14 +149,19 @@ export default function Home() {
               setModalDoor("door1");
             }}
           >
-            <BuildSections seats={seats} layout={layout.door1} door="door1" />
+            <BuildSections
+              seats={seats}
+              layout={sectionsLayout.door1}
+              door="door1"
+              takenSeatsPerSection={takenSeatsPerSection}
+            />
           </div>
         </div>
 
         <ReactModal
           isOpen={openModal}
           setIsOpen={setOpenModal}
-          row={layout[modalDoor].rows}
+          row={sectionsLayout[modalDoor]?.rows}
           door={modalDoor}
           seats={seats}
           setSeats={setSeats}
