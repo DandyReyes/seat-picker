@@ -26,8 +26,8 @@ export default function Home() {
       .post("http://localhost:8000/api/seating", {
         seats: value,
       })
-      .then((res) => {
-        console.log(res.data);
+      .catch((err) => {
+        console.error("Error updating seating data:", err);
       });
   };
 
@@ -55,9 +55,6 @@ export default function Home() {
       .catch((err) => {
         console.error("Error fetching seating data:", err);
       });
-    // axios.get("http://localhost:8000/api/seating/taken-seats").then((res) => {
-    //   console.log(res.data.counts);
-    // });
   }, []);
 
   const socket = useSocket();
