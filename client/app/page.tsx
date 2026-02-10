@@ -48,7 +48,6 @@ export default function Home() {
   }, [seats, debounceFn]);
 
   useEffect(() => {
-    console.log(URL);
     axios
       .get(`${URL}/api/seating`)
       .then((res) => {
