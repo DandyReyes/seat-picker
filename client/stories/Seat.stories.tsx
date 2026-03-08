@@ -14,7 +14,6 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     status: 0,
-    seatIndex: "row1:0:0",
     dataIndex: "row1:0:0",
   },
 };
