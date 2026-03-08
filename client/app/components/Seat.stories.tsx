@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
-import Seat from './Seat';
+import Seat from "./Seat";
 
 const meta = {
   component: Seat,
@@ -12,8 +12,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    "status": 0,
-    "seatIndex": "seatIndex",
-    "dataIndex": "dataIndex"
+    status: 0,
+    dataIndex: "dataIndex",
   },
 };
