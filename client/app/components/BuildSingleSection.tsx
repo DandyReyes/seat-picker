@@ -1,7 +1,7 @@
-import { BackendRow, RowLayout, SeatStatus, Sections } from "../types";
+"use client";
+import type { RowLayout, SeatStatus, Sections, SeatKey } from "../types";
 import Seat from "./Seat";
-import { useRef, useState } from "react";
-import { SeatKey } from "../types";
+import { useRef } from "react";
 
 type Props = {
   layout: RowLayout[];
@@ -25,11 +25,11 @@ const rotateFirstAndLastRows = {
 };
 
 export default function BuildSingleSection({
-  layout: rows,
-  door,
-  seats,
-  setSeats,
-}: Props) {
+  layout: rows = [],
+  door = "door1",
+  seats = {},
+  setSeats = () => {},
+}: Partial<Props>) {
   const isPainting = useRef(false);
   const paintedThisDrag = useRef<Set<SeatKey>>(new Set());
   const paintValue = useRef<0 | 1>(1);
@@ -103,7 +103,7 @@ export default function BuildSingleSection({
     >
       {rows?.map((row, rowIndex) => (
         <div
-          key={rowIndex}
+          key={`${door}:${rowIndex}`}
           className={`flex gap-0.5 mb-4 ${rotateFirstAndLastRows[door]}`}
         >
           {Array.from({ length: row.seatCount }).map((_, seatIndex) => {
@@ -111,9 +111,9 @@ export default function BuildSingleSection({
             const status = seats[key] ?? 0;
             return (
               <Seat
-                key={seatIndex}
+                key={key}
                 status={status as SeatStatus}
-                data-index={`${door}:${rowIndex}:${seatIndex}`}
+                dataIndex={`${door}:${rowIndex}:${seatIndex}`}
                 onClick={() => console.log(key)}
               />
             );

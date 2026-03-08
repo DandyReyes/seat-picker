@@ -22,14 +22,14 @@ export default function Home() {
     Record<string, number>
   >({});
 
-  const handleDebounceFn = (value: SeatMap) => {
-    axios
-      .post(`${URL}/api/seating`, {
+  const handleDebounceFn = async (value: SeatMap) => {
+    try {
+      await axios.post(`${URL}/api/seating`, {
         seats: value,
-      })
-      .catch((err) => {
-        console.error("Error updating seating data:", err);
       });
+    } catch (err) {
+      console.error("Error updating seating data:", err);
+    }
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -63,20 +63,33 @@ export default function Home() {
   useEffect(() => {
     if (!socket) return;
 
-    const handleTotalCount = (data: string) => {
+    const handleTotalUsersOnline = (data: string) => {
       setUserCount(data);
     };
 
-    const handleCounts = (counts: Record<string, number>) => {
+    const handleSeatingUpdated = ({
+      seats,
+      counts,
+    }: {
+      seats: SeatMap;
+      counts: Record<string, number>;
+    }) => {
+      setSeats(seats);
       setTakenSeatsPerSection(counts);
     };
 
-    socket.on("totalCount", handleTotalCount);
-    socket.on("seatCountsUpdated", handleCounts);
+    socket.on("totalUsersOnline", handleTotalUsersOnline);
+    socket.on("seatingUpdated", handleSeatingUpdated);
+    socket.on("connect_error", (err: any) => {
+      console.error("err.message: ", err.message);
+      console.error("err.description: ", err.description);
+      console.error("err.context: ", err.context);
+    });
 
     return () => {
-      socket.off("totalCount", handleTotalCount);
-      socket.off("seatCountsUpdated", handleCounts);
+      socket.off("totalUsersOnline", handleTotalUsersOnline);
+      socket.off("seatingUpdated", handleSeatingUpdated);
+      socket.off("connect_error");
     };
   }, [socket]);
 
