@@ -7,8 +7,8 @@ import {
   createContext,
   useContext,
 } from "react";
-import { createSocket } from "./socket";
 import { Socket } from "socket.io-client";
+import { createSocket } from "./socket";
 
 const SocketContext = createContext<Socket | null>(null);
 
@@ -17,21 +17,22 @@ export function SocketProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const s = createSocket();
-    s.connect();
+
+    if (!s.connected) {
+      s.connect();
+    }
+
     setSocket(s);
 
-    return () => {
-      s.disconnect();
-    };
+    // ❌ Do NOT disconnect here
+    // Let the socket live for the whole app lifetime
   }, []);
-
-  if (!socket) return null;
 
   return (
     <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
   );
 }
 
-export function useSocket(): Socket | null {
+export function useSocket() {
   return useContext(SocketContext);
 }
