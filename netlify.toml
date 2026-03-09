@@ -3,9 +3,6 @@
   command = "npm run build"
   publish = ".next"
 
-[build.environment]
-  NPM_FLAGS = "--include=dev"
-
 [context.production.environment]
   NODE_VERSION = "20"
 
